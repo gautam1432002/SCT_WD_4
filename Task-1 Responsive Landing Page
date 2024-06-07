@@ -1,0 +1,85 @@
+index.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Navigation Menu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav id="navbar">
+        <ul>
+            <li><a href="#home">HOME</a></li>
+            <li><a href="#about">ABOUT</a></li>
+            <li><a href="#services">SERVICES</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+        </ul>
+    </nav>
+    <script src="taske1.js"></script>
+</body>
+</html>
+
+styles.css:
+body {
+  margin: 0;
+  background: url(sky.jpg.jpg);
+  background-repeat: no-repeat;
+}
+
+#navbar {
+  position: fixed;
+  width: 100%;
+  background-color: #ffffff85;
+  box-shadow: 0 25px 45px rgba(37, 37, 37, 0.26); 
+  border-radius: 10px;
+}
+
+#navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-around;
+  font-weight: 100;
+}
+
+#navbar ul li {
+  float: left;
+  border-radius: 5px;
+}
+
+#navbar ul li a {
+  display: block;
+  color: rgba(5, 5, 5, 0.685);
+  text-align: center;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+}
+
+#navbar ul li a:hover {
+  background-color: #ffffff71;
+  color: rgb(0, 0, 0);
+  box-shadow: 0 25px 45px rgba(37, 37, 37, 0.26); 
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  font-weight: 700; 
+  
+}
+
+
+.scroll-nav {
+  background-color: #555;
+}
+
+script.js:
+window.addEventListener('scroll', function() {
+  var navbar = document.getElementById('navbar');
+  if (window.scrollY > 50) {
+      navbar.classList.add('scroll-nav');
+  } else {
+      navbar.classList.remove('scroll-nav');
+  }
+});
