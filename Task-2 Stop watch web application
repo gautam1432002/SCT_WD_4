@@ -1,0 +1,152 @@
+index.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="stopwatch-container">
+        <h1>STOPWATCH</h1>
+        <div class="digital-display">
+            <span id="time">00:00:00.00</span>
+        </div>
+        <div class="controls">
+            <button id="startStop">Start</button>
+            <button id="reset">Reset</button>
+            <button id="lap">Lap</button>
+        </div>
+        <ul id="laps"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+styles.css:
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url(stopwatch.jpg.jpg); //Task-2\stopwatch.jpg.jpg
+}
+
+.stopwatch-container {
+    text-align: center;
+    background: #0021df;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(7, 7, 7, 0.986);
+    backdrop-filter: blur(5px);
+}
+
+.digital-display {
+    font-size: 2em;
+    margin-bottom: 20px;
+    border: 1px solid #0a0a0a8e;
+    border-radius: 10px;
+    background: #ffffff88;
+    box-shadow: 0 0 10px rgba(56, 56, 56, 0.514);
+    backdrop-filter: blur(10px);
+}
+
+.controls button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ffffff88;
+    transition: background-color 0.3s;
+    border: 1px solid #0a0a0a8e;
+    box-shadow: 0 0 10px rgba(56, 56, 56, 0.514);
+    backdrop-filter: blur(10px);
+}
+
+.controls button:hover {
+    background-color: #fffb00;
+}
+
+#laps {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#laps li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+script.js:
+let startTime = 0;
+let elapsedTime = 0;
+let timerInterval;
+let isRunning = false;
+let lapCounter = 0;
+
+const timeDisplay = document.getElementById('time');
+const startStopButton = document.getElementById('startStop');
+const resetButton = document.getElementById('reset');
+const lapButton = document.getElementById('lap');
+const lapsContainer = document.getElementById('laps');
+
+startStopButton.addEventListener('click', startStop);
+resetButton.addEventListener('click', reset);
+lapButton.addEventListener('click', recordLap);
+
+function startStop() {
+    if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        startStopButton.textContent = 'Start';
+    } else {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTime, 10);
+        isRunning = true;
+        startStopButton.textContent = 'Stop';
+    }
+}
+
+function reset() {
+    clearInterval(timerInterval);
+    isRunning = false;
+    elapsedTime = 0;
+    lapCounter = 0;
+    timeDisplay.textContent = '00:00:00.00';
+    lapsContainer.innerHTML = '';
+    startStopButton.textContent = 'Start';
+}
+
+function recordLap() {
+    if (isRunning) {
+        const lapTime = formatTime(elapsedTime);
+        const lapElement = document.createElement('li');
+        lapElement.textContent = `Lap ${++lapCounter}: ${lapTime}`;
+        lapsContainer.appendChild(lapElement);
+    }
+}
+
+function updateTime() {
+    elapsedTime = Date.now() - startTime;
+    timeDisplay.textContent = formatTime(elapsedTime);
+}
+
+function formatTime(ms) {
+    const milliseconds = Math.floor((ms % 1000) / 10);
+    const seconds = Math.floor((ms / 1000) % 60);
+    const minutes = Math.floor((ms / (1000 * 60)) % 60);
+    const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+
+    return (
+        (hours > 0 ? (hours < 10 ? '0' + hours : hours) + ':' : '') +
+        (minutes < 10 ? '0' + minutes : minutes) + ':' +
+        (seconds < 10 ? '0' + seconds : seconds) + '.' +
+        (milliseconds < 10 ? '0' + milliseconds : milliseconds)
+    );
+}
+
