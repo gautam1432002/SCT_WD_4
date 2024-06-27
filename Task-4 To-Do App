@@ -1,0 +1,165 @@
+index.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="styles4.css">
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do App</h1>
+        <div class="task-input">
+            <input type="text" id="task-input" placeholder="Enter new task">
+            <input type="date" id="task-date">
+            <input type="time" id="task-time">
+            <button id="add-task-button">Add Task</button>
+        </div>
+        <div id="task-list" class="task-list"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+styles.css:
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url(task4image.jpg);
+}
+
+.container {
+    text-align: center;
+    background: #2e2e2e23;
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.527);
+    width: 300px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.task-input {
+    margin-bottom: 20px;
+}
+
+.task-input input {
+    padding: 10px;
+    margin: 5px;
+    border: 2px solid #00000000;
+    border-radius: 10px;
+}
+
+#add-task-button {
+    padding: 10px;
+    margin: 5px;
+    font-size: 1em;
+    border: 2px solid #00000000;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff9f97c;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#add-task-button:hover {
+    background-color: #bca1ee;
+    transform: translateY(-3px);
+}
+
+#add-task-button:active {
+    transform: translateY(1px);
+}
+
+.task-list {
+    text-align: left;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.task.completed {
+    text-decoration: line-through;
+    background-color: #d3ffd3;
+}
+
+.task button {
+    margin-left: 5px;
+}
+
+script.js:
+document.addEventListener('DOMContentLoaded', () => {
+    const taskInput = document.getElementById('task-input');
+    const taskDate = document.getElementById('task-date');
+    const taskTime = document.getElementById('task-time');
+    const addTaskButton = document.getElementById('add-task-button');
+    const taskList = document.getElementById('task-list');
+
+    addTaskButton.addEventListener('click', addTask);
+
+    function addTask() {
+        const taskText = taskInput.value.trim();
+        const date = taskDate.value;
+        const time = taskTime.value;
+
+        if (taskText === '') {
+            alert('Please enter a task.');
+            return;
+        }
+
+        const task = document.createElement('div');
+        task.className = 'task';
+        task.innerHTML = `
+            <span>${taskText} - ${date} ${time}</span>
+            <div>
+                <button onclick="editTask(this)">Edit</button>
+                <button onclick="completeTask(this)">Complete</button>
+                <button onclick="deleteTask(this)">Delete</button>
+            </div>
+        `;
+        taskList.appendChild(task);
+
+        taskInput.value = '';
+        taskDate.value = '';
+        taskTime.value = '';
+    }
+
+    window.editTask = function(button) {
+        const task = button.parentElement.parentElement;
+        const taskText = prompt('Edit your task:', task.children[0].textContent.split(' - ')[0]);
+
+        if (taskText === null || taskText.trim() === '') {
+            return;
+        }
+
+        const date = prompt('Edit date (YYYY-MM-DD):', task.children[0].textContent.split(' - ')[1].split(' ')[0]);
+        const time = prompt('Edit time (HH:MM):', task.children[0].textContent.split(' - ')[1].split(' ')[1]);
+
+        task.children[0].textContent = `${taskText.trim()} - ${date} ${time}`;
+    }
+
+    window.completeTask = function(button) {
+        const task = button.parentElement.parentElement;
+        task.classList.toggle('completed');
+    }
+
+    window.deleteTask = function(button) {
+        const task = button.parentElement.parentElement;
+        task.remove();
+    }
+});
